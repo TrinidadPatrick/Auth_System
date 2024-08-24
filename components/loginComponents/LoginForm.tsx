@@ -32,6 +32,7 @@ const LoginForm = () => {
         setIsLoading(true)
         try {
             const response = await LoginWithCredentials(data)
+            window.location.reload()
             if(response?.status)
             {
                 setErrorMessage(response.error)

@@ -5,6 +5,8 @@ import { auth } from "@/auth"
 const protectedRoutes = ["/home", "/settings", "/"]
 const authRoutes = ["/login", "/signup"]
 
+const publicRoutes = ["/forgot-password", "/reset-password"]
+
 export default async function middleware(request: NextRequest) {
     const session = await auth()
 

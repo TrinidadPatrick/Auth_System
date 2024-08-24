@@ -74,7 +74,7 @@ const form = useForm<z.infer<typeof ResetSchema>>({
                 </Button>
             </form>
         </Form>
-        <Link href="/reset-password" className='text-xs text-gray-500 font-medium'>Back to login</Link>
+        <Link href="/login" className='text-xs text-gray-500 font-medium'>Back to login</Link>
       </div>
     </div>
   );

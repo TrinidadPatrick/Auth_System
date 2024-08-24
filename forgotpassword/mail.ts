@@ -85,7 +85,7 @@ const transporter = nodemailer.createTransport({
         `,
   });
 
-  console.log("Message sent: %s", info.messageId);
+  console.log("Message sent: %s", info);
   };
   
 

@@ -48,7 +48,7 @@ const transporter = nodemailer.createTransport({
       pass : process.env.GMAIL_PASSWORD,
     },
     tls: {
-        rejectUnauthorized: false //Remove when in development
+        rejectUnauthorized: true //Remove when in development
     }
   })
 

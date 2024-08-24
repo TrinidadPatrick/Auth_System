@@ -18,7 +18,6 @@ export const loginWithGithub = async () => {
 }
 
 export const loginWithGoogle = async () => {
-  console.log("Hello")
   await signIn("google", {redirectTo: "/home"})
   revalidatePath("/home")
 }

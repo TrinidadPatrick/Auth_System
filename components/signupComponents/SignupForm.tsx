@@ -16,11 +16,13 @@ import Link from 'next/link'
 import LoginWithGithubButton from '../LoginWithGithubButton'
 import LoginWithGoogleButton from '../LoginWithGoogleButton'
 import { useRouter } from 'next/navigation'
+import Loader from '../Loader'
 
 const SignupForm = () => {
     const router = useRouter()
     const [showPassword, setShowPassword] = useState<boolean>(false)
     const [errorMessage, setErrorMessage] = useState<string | undefined>("")
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const form = useForm<z.infer<typeof SignupSchema>>({
         resolver: zodResolver(SignupSchema),
         defaultValues: {
@@ -36,11 +38,21 @@ const SignupForm = () => {
         }
 
     const handleSubmit = async (data: z.infer<typeof SignupSchema>) => {
+        setIsLoading(true)
         try {
-            const response = await signupWithCredentials(data)
-            // router.push('/login')
+            const response : any = await signupWithCredentials(data)
+            console.log(response)
+            if(response && response.message == 'Email already exists')
+            {
+                setErrorMessage("Email already exists")
+                return
+            }
+            window.location.reload()
         } catch (error) {
             console.log(error)
+            setErrorMessage("Something went wrong, please try again later")
+        } finally {
+            setIsLoading(false) 
         }
     }
 
@@ -91,13 +103,15 @@ const SignupForm = () => {
                             
                         </FormControl>
                     <FormMessage />
-                    <FormError errorMessage={errorMessage} />
-                    <Link href="/signup" className='text-xs mt-1 text-gray-500 font-medium'>Forgot password</Link>
+                    
                 </FormItem>}
                 />
-                
+                {/* Error message for invalid credentials or existing email */}
+                <FormError errorMessage={errorMessage} />
                 </div>
-                <Button type="submit" className="w-full bg-gray-800 rounded">Sign up</Button>
+                <Button type="submit" className="w-full bg-gray-800 rounded">
+                    <Loader isLoading={isLoading} text='Sign Up' />
+                </Button>
             </form>
         </Form>
         <div className='flex justify-center mt-2'>

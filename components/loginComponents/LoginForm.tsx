@@ -14,10 +14,12 @@ import { FormError } from '../FormError'
 import LoginWithGoogleButton from '../LoginWithGoogleButton'
 import { FormHeader } from '../FormHeader'
 import Link from 'next/link'
+import Loader from '../Loader'
 
 const LoginForm = () => {
     const [errorMessage, setErrorMessage] = useState<string | undefined>("")
     const [showPassword, setShowPassword] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const form = useForm<z.infer<typeof LoginSchema>>({
         resolver: zodResolver(LoginSchema),
         defaultValues: {
@@ -27,7 +29,7 @@ const LoginForm = () => {
     })
 
     const handleSubmit = async (data: z.infer<typeof LoginSchema>) => {
-
+        setIsLoading(true)
         try {
             const response = await LoginWithCredentials(data)
             if(response?.status)
@@ -36,8 +38,9 @@ const LoginForm = () => {
             }
         } catch (error) {
             console.log(error)
+        } finally {
+            setIsLoading(false)
         }
-        
         
     }
 
@@ -48,7 +51,7 @@ const LoginForm = () => {
   
 
     return (
-    <div className='px-10 flex flex-col justify-center w-screen semiSm:w-[350px] h-full '>
+    <div className='px-10 flex flex-col justify-center w-screen semiSm:w-[400px] h-full '>
         <FormHeader title='Sign In' paragraph='Please enter your email and password' />
         <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSubmit)} className='flex flex-col gap-4'>
@@ -81,13 +84,17 @@ const LoginForm = () => {
                             
                         </FormControl>
                     <FormMessage />
-                    <FormError errorMessage={errorMessage} />
-                    <Link href="/signup" className='text-xs mt-1 text-gray-500 font-medium'>Forgot password</Link>
+                    
                 </FormItem>}
                 />
-                
+                {/* Error message for invalid credentials */}
+                <FormError errorMessage={errorMessage} />
+                <Link href="/reset-password" className='text-xs text-gray-500 font-medium'>Forgot password</Link>
                 </div>
-                <Button type="submit" className="w-full bg-gray-800 rounded">Sign in</Button>
+                {/* Submit button */}
+                <Button type="submit" className={`w-full ${isLoading ? 'bg-gray-500' : 'bg-gray-800'} rounded`}>
+                    <Loader isLoading={isLoading} text='Sign in' />
+                </Button>
             </form>
         </Form>
         <div className='flex justify-center mt-2'>

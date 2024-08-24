@@ -2,7 +2,7 @@
 
 import * as z from "zod";
 import { useForm } from "react-hook-form";
-import { useState, useTransition } from "react";
+import { Suspense, useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NewPasswordSchema, ResetSchema } from "@/Schemas";
 import { FormError } from "@/components/FormError";
@@ -47,6 +47,7 @@ const form = useForm<z.infer<typeof NewPasswordSchema>>({
   };
 
   return (
+    <Suspense>
     <div className="w-[400px] flex flex-col justify-center h-fit ">
       <div className="flex justify-center">
         <h1 className="text-xl font-bold ">Password reset</h1>
@@ -81,5 +82,6 @@ const form = useForm<z.infer<typeof NewPasswordSchema>>({
         </Form>
       </div>
     </div>
+    </Suspense>
   );
 };
